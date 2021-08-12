@@ -1,0 +1,145 @@
+﻿@model StudentManagementSystem.Models.Student
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Student Details</h1>
+<hr />
+<div class="row">
+    <div class="col">
+        <h4>Personal Details</h4>
+
+        @*TODO Menampilkan data murid*@
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.AdminNo)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.AdminNo)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Dob)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Dob)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Gender)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.ContactNumber)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.ContactNumber)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Address.FullAddress)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Diploma)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Diploma.Name)
+            </dd>
+        </dl>
+
+    </div>
+    <div class="col">
+
+        @*TODO Menampilkan module murid*@
+        <form asp-action="DeleteModules" asp-route-id="@Model.AdminNo">
+            <div class="row col">
+                <h4 class="col">Modules</h4>
+                @if (Enumerable.Count(ViewBag.ModuleSelectionList) > 0)
+                {
+                    <button type="button" class="btn btn-primary float-right col-md-3" data-toggle="modal"
+                            data-target="#addModuleModal">
+                        Add Module
+                    </button>
+                }
+                @*TODO Add delete button*@
+                @if (Model.StudentModules.Count > 0)
+                {
+                    <button type="submit" class="btn btn-danger float-right col-md-4">
+                        Remove Modules
+                    </button>
+                }
+            </div>
+
+            <table class="table">
+                <tbody>
+                    @if (Model.StudentModules.Count > 0)
+                    {
+                        @foreach (var item in Model.StudentModules)
+                        {
+                            <tr>
+                                @*TODO Add checkbox here*@
+                                <td>
+                                    <input type="checkbox" class="form-check-input" name="StudentModules" value="@item.ModuleId" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Module.ModuleId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Module.Name)
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                No modules assigned.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<div>
+
+    @*Add navigation link here*@
+
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<div class="modal fade" id="addModuleModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="AddModules" asp-route-id="@Model.AdminNo">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title-">Add Modules</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="StudentModules" class="control-label"></label>
+                        <select asp-for="StudentModules" class="form-control" asp-items="ViewBag.ModuleSelectionList"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
